@@ -3,6 +3,6 @@ var express = require('express'),
 
 var homeController = require('../controllers/homeController');
 
-router.get('/', homeController.init);
+router.get('*', homeController.init);
 
 module.exports = router;
