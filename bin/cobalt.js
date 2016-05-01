@@ -103,7 +103,7 @@ function initCobalt(){
 		var ncp = require('ncp');
 		var project_path = process.cwd();
 
-		ncp(__dirname + '/../frontend', project_path+'/frontend/', function(err){
+		ncp(__dirname + '/../app', project_path+'/app/', function(err){
 			if(err){
 				console.log(err);
 			}
@@ -122,7 +122,7 @@ function initCobalt(){
 			}
 			console.log("Copy app.js ...Done");
 		})
-		ncp(__dirname + '/../webpack.config.js', project_path+'/webpack.config.js', function(err){
+		ncp(__dirname + '/../project_webpack.config.js', project_path+'/webpack.config.js', function(err){
 			if(err){
 				console.log(err);
 			}
