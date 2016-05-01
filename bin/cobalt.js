@@ -24,6 +24,7 @@ function startCobalt(){
 
 function initCobalt(){
 	var prompt = require('prompt');
+	prompt.message = "";
 	var project_path = process.cwd();
 	var defaults = {
 		name : project_path.slice(project_path.lastIndexOf('\/') + 1),
