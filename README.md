@@ -13,5 +13,13 @@ Using cobalt is relatively straight forward. Install this package globally and i
 To start server:
 ``` cobalt start  ```
 
+
+## Upcoming
+This package is under development
+
+* Integration of Redux
+* Cobalt way of definition of models and dispatchers
+
+
 #### License: ISC
 #### Author: [Sujoy Chatterjee](http://github.com/sujoychatter)
