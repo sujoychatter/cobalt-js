@@ -11,11 +11,15 @@
   "license": {{license}},
   "keywords": {{keywords}},
   "dependencies": {
+    "babel-preset-stage-2": "^6.5.0",
     "express": "^4.13.4",
     "jade": "^1.11.0",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",
-    "react-router": "^2.3.0"
+    "react-redux": "^4.4.5",
+    "react-router": "^2.3.0",
+    "react-router-redux": "^4.0.4",
+    "redux": "^3.5.2"
   },
   "devDependencies": {
     "babel-core": "^6.7.7",
