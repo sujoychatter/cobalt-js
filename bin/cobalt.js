@@ -103,6 +103,7 @@ function initCobalt(){
 	function copyFiles(){
 		var ncp = require('ncp');
 		var project_path = process.cwd();
+		var exec = require('child_process').exec;
 
 		ncp(__dirname + '/../app', project_path+'/app/', function(err){
 			if(err){
@@ -128,6 +129,15 @@ function initCobalt(){
 				console.log(err);
 			}
 			console.log("Copy webpack config ...Done");
+		})
+
+		exec('mkdir node_modules/cobalt-js');
+
+		ncp(__dirname + '/../index.js', project_path+'/node_modules/cobalt-js/index.js', function(err){
+			if(err){
+				console.log(err);
+			}
+			console.log("Copy cobalt package..Done");
 		})
 	}
 }
