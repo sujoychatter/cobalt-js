@@ -9,7 +9,7 @@ import Users from './modules/Users'
 import reducers from './reducers'
 
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { fetchedUrlReducer } from 'cobalt-js'
+import { fetchedUrlReducer, requestProgressReducer } from 'cobalt-js'
 import { Provider } from 'react-redux'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import thunk from 'redux-thunk';
@@ -18,7 +18,8 @@ const store = createStore(
   combineReducers({
     ...reducers,
     routing: routerReducer,
-    fetchedUrl: fetchedUrlReducer
+    fetchedUrl: fetchedUrlReducer,
+    requestProgress: requestProgressReducer
   }),
   applyMiddleware(thunk)
 )
