@@ -8,20 +8,20 @@ var Posts = React.createClass( {
 		this.props.loadData();
 	},
 	render() {
-		return <div>Posts: {this.props.posts.items}</div>
+		return <div><div>Loading: {this.props.reqLoading ? "true" : "false"}</div><div>Posts: {this.props.posts.items}</div></div>
 	}
 })
 
 function mapDispatchToProps(dispatch){
   return {
     loadData: () => {
-      dispatch(action('loadData', 'Post', {data: null, url: '/', params: {id: 1}, checkType: 'url', reqSettings: {body: {id: 1}}}))
+      dispatch(action('loadData', 'Post', {name: 'demoReq', url: '/api/demoPosts', params: {id: 1}, checkType: 'url', reqSettings: {body: {id: 1}, mode: 'no-cors', headers: {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}}}))
     }
   }
 }
 
 function mapStateToProps(state) {
-  return { posts: state.posts };
+  return { posts: state.posts , reqLoading: state.requestProgress.demoReq};
 }
 
 Posts = connect(mapStateToProps, mapDispatchToProps)(Posts);
