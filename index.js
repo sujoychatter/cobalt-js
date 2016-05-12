@@ -1,5 +1,6 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+var objectAssign = require('object-assign');
 
 function action (name, model, item){
 	var that = this;
@@ -15,19 +16,21 @@ function action (name, model, item){
 }
 
 function makeRequest(url, settings){
-	return fetch(url, settings)
-	.then(function(response) {
-		if (response.status >= 400) {
-			throw new Error("Bad response from server");
-		}
-		//response.json()
-		return {id: 1, name: 'Sujoy'};
-	})
+	return fetch(url, settings).then(function(response) {
+        if (response.status >= 400) {
+            throw new Error("Bad response from server");
+        }
+        return response.json();
+    })
 }
 
-function needsReq(url, settings, checkType, state){
+function needsReq(item, state){
+	var url = item.url,
+		settings = item.reqSettings,
+		checkType = item.checkType,
+		name = item.name;
 	if(checkType === "url"){
-		return state.fetchedUrl.urls.indexOf(url + JSON.stringify(settings)) == -1;
+		return state.fetchedUrl.urls.indexOf(getRequestName(name, url, settings)) == -1;
 	}
 	return true;
 }
@@ -36,22 +39,24 @@ const initialfetchedUrlState = {
 	urls: []
 }
 
-const initialRequestProgressState = {
-	inProgress: false
+const initialRequestProgressState = {}
+
+function getRequestName(name, url, settings){
+	return name || (url + JSON.stringify(settings));
 }
 
 module.exports = {
 	action : function(name, model, item){
 		return function(dispatch, getState){
-			if(item.forceReq === true || (item.url && needsReq(item.url, item.reqSettings, item.checkType, getState()))){
+			if(item.forceReq === true || (item.url && needsReq(item, getState()))){
 				// TODO: Support for multiple requests
-				dispatch(action('ajaxRequest', 'cobalt', {data: {inProgress: true}}));
+				dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) ,inProgress: true}}));
 				makeRequest(item.url, item.reqSettings).then(function(data){
 					if(!item.checkType || item.checkType == 'url'){
-						dispatch(action('logURLFetched', 'cobalt', {data: {url: item.url, settings: item.reqSettings}}))
+						dispatch(action('logURLFetched', 'cobalt', {data: {url: item.url, settings: item.reqSettings, name: item.name}}))
 					}
 					item.data = data;
-					dispatch(action('ajaxRequest', 'cobalt', {data: {inProgress: false}}));
+					dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) , inProgress: false}}));
 					dispatch(action(name, model, item));
 				})
 			}
@@ -63,7 +68,7 @@ module.exports = {
 	fetchedUrlReducer: function(state = initialfetchedUrlState, action = {}) {
 		switch (action.type) {
 			case 'logURLFetched__cobalt':
-				var newState = {urls: state.urls.concat(action.data.url + JSON.stringify(action.data.settings))}
+				var newState = {urls: state.urls.concat(getRequestName(action.data.name, action.data.url, action.data.settings))}
 				return  newState;
 			default:
 				return state;
@@ -72,8 +77,9 @@ module.exports = {
 	requestProgressReducer: function(state = initialRequestProgressState, action = {}) {
 		switch (action.type) {
 			case 'ajaxRequest__cobalt':
-				var newState = {inProgress: action.data.inProgress}
-				return  newState;
+				var reqState = {}
+				reqState[action.data.name] = action.data.inProgress;
+				return objectAssign({}, state, reqState);
 			default:
 				return state;
 		}
