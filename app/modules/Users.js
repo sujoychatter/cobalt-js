@@ -1,5 +1,4 @@
 import React from 'react';
-import {getUsers} from '../actions/users';
 import { connect } from 'react-redux';
 
 var Users = React.createClass( {

@@ -49,7 +49,6 @@ module.exports = {
 	action : function(name, model, item){
 		return function(dispatch, getState){
 			if(item.forceReq === true || (item.url && needsReq(item, getState()))){
-				// TODO: Support for multiple requests
 				dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) ,inProgress: true}}));
 				makeRequest(item.url, item.reqSettings).then(function(data){
 					if(!item.checkType || item.checkType == 'url'){
