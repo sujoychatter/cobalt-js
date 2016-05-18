@@ -29,7 +29,8 @@ function needsReq(item, state){
 		settings = item.reqSettings,
 		checkType = item.checkType,
 		name = item.name;
-	if(checkType === "url"){
+
+	if((!settings || !settings.type || settings.type === 'GET') && checkType === "url"){
 		return state.fetchedUrl.urls.indexOf(getRequestName(name, url, settings)) == -1;
 	}
 	return true;
@@ -54,9 +55,9 @@ module.exports = {
 					if(!item.checkType || item.checkType == 'url'){
 						dispatch(action('logURLFetched', 'cobalt', {data: {url: item.url, settings: item.reqSettings, name: item.name}}))
 					}
-					item.data = data;
+					var itemWithData = objectAssign({}, item, {data: data});
 					dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) , inProgress: false}}));
-					dispatch(action(name, model, item));
+					dispatch(action(name, model, itemWithData));
 				})
 			}
 			else{
