@@ -1,6 +1,13 @@
 #! /usr/bin/env node
 
-var program = require('commander');
+var program = require('commander'),
+		exec = require('child_process').exec,
+		prompt = require('prompt'),
+		fs = require('fs'),
+		exec = require('child_process').exec,
+		Spinner = require('cli-spinner').Spinner,
+		ncp = require('ncp'),
+		path = require('path');
 
 program
   .version('0.0.1')
@@ -17,13 +24,11 @@ program.args.forEach(function(arg){
 })
 
 function startCobalt(){
-	var exec = require('child_process').exec;
 	exec('npm start');
 	console.log("Server started at port 3000")
 }
 
 function initCobalt(){
-	var prompt = require('prompt');
 	prompt.message = "";
 	var project_path = process.cwd();
 	var defaults = {
@@ -62,15 +67,14 @@ function initCobalt(){
 			console.log(err);
 			return;
 		}
-		var fs = require('fs');
 		var project_path = process.cwd();
-		var files = [{source: __dirname + '/../project_package.json', destination: 'package.json'}]
+		var files = [{source: path.join(__dirname, '../project_package.json'), destination: 'package.json'}]
 
 		files.forEach(function(file){
 			var fileData = fs.readFileSync(file.source, "utf8"),
 			start = fileData.indexOf('{{'),
 			end = fileData.indexOf('}}', start);
-			while(start != -1){
+			while(start !== -1){
 				var key = fileData.slice(start + 2, end);
 				fileData = fileData.replace('{{' + key + '}}', '\"' + (results[key] || defaults[key] || '') + '\"');
 				start = fileData.indexOf('{{'),
@@ -83,10 +87,7 @@ function initCobalt(){
 	})
 
 	function setupNodeModules(){
-		var exec = require('child_process').exec;
-
 		console.log("--------Setting up node modules ----------")
-		var Spinner = require('cli-spinner').Spinner;
 		var spinner = new Spinner('Please wait... %s');
 		spinner.setSpinnerString('|/-\\');
 		spinner.start();
@@ -101,43 +102,25 @@ function initCobalt(){
 	}
 
 	function copyFiles(){
-		var ncp = require('ncp');
-		var project_path = process.cwd();
-		var exec = require('child_process').exec;
-
-		ncp(__dirname + '/../app', project_path+'/app/', function(err){
-			if(err){
-				console.log(err);
-			}
-			console.log("Copy app...Done");
-		})
-
-		ncp(__dirname + '/../server', project_path+'/server/', function(err){
-			if(err){
-				console.log(err);
-			}
-			console.log("Copy server...Done");
-		})
-		ncp(__dirname + '/../app.js', project_path+'/app.js', function(err){
-			if(err){
-				console.log(err);
-			}
-			console.log("Copy app.js ...Done");
-		})
-		ncp(__dirname + '/../project_webpack.config.js', project_path+'/webpack.config.js', function(err){
-			if(err){
-				console.log(err);
-			}
-			console.log("Copy webpack config ...Done");
-		})
+		
+		var project_path = process.cwd(),
+		copyItems = [
+			{source: '/../app', destination: '/app/', notification: 'Copy app...Done'},
+			{source: '/../server', destination: '/server/', notification: 'Copy server...Done'},
+			{source: '/../app.js', destination: '/app.js', notification: 'Copy app.js ...Done'},
+			{source: '/../project_webpack.config.js', destination: '/webpack.config.js', notification: 'Copy webpack config ...Done'},
+			{source: '/../index.js', destination: '/node_modules/cobalt-js/index.js', notification: 'Copy cobalt package..Done'}
+		];
 
 		exec('mkdir node_modules/cobalt-js');
 
-		ncp(__dirname + '/../index.js', project_path+'/node_modules/cobalt-js/index.js', function(err){
-			if(err){
-				console.log(err);
-			}
-			console.log("Copy cobalt package..Done");
+		copyItems.forEach(function(item){
+			ncp(path.join(__dirname , item.source) , path.join(project_path , item.destination), function(err){
+				if(err){
+					console.log(err);
+				}
+				console.log(item.notification);
+			})
 		})
 	}
 }
