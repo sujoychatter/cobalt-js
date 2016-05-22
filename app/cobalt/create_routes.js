@@ -11,7 +11,7 @@ var routeComponentMap = "var componentRoutes =\n[\n";
 nativeObjectRoutes.forEach(function(route){
   var wrapper = templateWrapper;
   var start = wrapper.indexOf('{{component_name}}');
-  while(start != -1){
+  while(start !== -1){
     wrapper = wrapper.replace('{{component_name}}', route.file + '.js');
     start = wrapper.indexOf('{{component_name}}');
   }

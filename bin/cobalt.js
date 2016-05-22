@@ -4,7 +4,6 @@ var program = require('commander'),
 		exec = require('child_process').exec,
 		prompt = require('prompt'),
 		fs = require('fs'),
-		exec = require('child_process').exec,
 		Spinner = require('cli-spinner').Spinner,
 		ncp = require('ncp'),
 		path = require('path');
@@ -92,6 +91,10 @@ function initCobalt(){
 		spinner.setSpinnerString('|/-\\');
 		spinner.start();
 		exec('npm install', function(err, stdout, stderr){
+			if(err){
+				console.log(err);
+				return;
+			}
 			console.log(stdout);
 			spinner.stop(true)
 			console.log('--------Node modules setup complete--------')

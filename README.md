@@ -1,4 +1,4 @@
-# cobaltJS
+# CobaltJS
 
 Everything React in a snap
 
