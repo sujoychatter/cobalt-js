@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": {{text_command}},
-    "start": "node create_routes.js && webpack --inline --content-base . && node app.js"
+    "start": "node app/cobalt/create_routes.js && webpack --inline --content-base . && node app.js"
   },
   "author": {{author}},
   "license": {{license}},

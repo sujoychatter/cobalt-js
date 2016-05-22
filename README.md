@@ -2,6 +2,8 @@
 
 Everything React in a snap
 
+[![Code Climate](https://codeclimate.com/github/sujoychatter/cobalt-js/badges/gpa.svg)](https://codeclimate.com/github/sujoychatter/cobalt-js)
+
 ## Features
 
 * sets up the entire React app achitecture

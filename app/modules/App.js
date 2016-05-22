@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-export default React.createClass({
+module.exports =  React.createClass({
   render() {
     return (
       <div>

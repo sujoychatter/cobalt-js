@@ -1,5 +1,5 @@
 const initialState = {
-	items: [],
+	items: []
 }
 
 export default function posts(state = initialState, action = {}) {

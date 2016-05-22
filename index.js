@@ -31,7 +31,7 @@ function needsReq(item, state){
 		name = item.name;
 
 	if((!settings || !settings.type || settings.type === 'GET') && checkType === "url"){
-		return state.fetchedUrl.urls.indexOf(getRequestName(name, url, settings)) == -1;
+		return state.fetchedUrl.urls.indexOf(getRequestName(name, url, settings)) === -1;
 	}
 	return true;
 }
@@ -52,7 +52,7 @@ module.exports = {
 			if(item.forceReq === true || (item.url && needsReq(item, getState()))){
 				dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) ,inProgress: true}}));
 				makeRequest(item.url, item.reqSettings).then(function(data){
-					if(!item.checkType || item.checkType == 'url'){
+					if(!item.checkType || item.checkType === 'url'){
 						dispatch(action('logURLFetched', 'cobalt', {data: {url: item.url, settings: item.reqSettings, name: item.name}}))
 					}
 					var itemWithData = objectAssign({}, item, {data: data});
