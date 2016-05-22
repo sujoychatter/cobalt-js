@@ -26,4 +26,4 @@ function mapStateToProps(state) {
 
 Posts = connect(mapStateToProps, mapDispatchToProps)(Posts);
 
-export default Posts;
+module.exports = Posts;

@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 var Users = React.createClass( {
-	render() {
-		return <div>Users: {this.props.users.items}</div>
-	}
+  render() {
+    return <div>Users: {this.props.users.items}</div>
+  }
 })
 
 function mapStateToProps(state) {
@@ -13,4 +13,4 @@ function mapStateToProps(state) {
 
 Users = connect(mapStateToProps)(Users);
 
-export default Users
+module.exports = Users

@@ -1,37 +1,38 @@
 import { Router, Route, hashHistory } from 'react-router'
-
-import React from 'react'
+import React, { Component } from 'react'
 import { render } from 'react-dom'
-import App from './modules/App'
-import Posts from './modules/Posts'
-import Users from './modules/Users'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk';
+
+import { fetchedUrlReducer, requestProgressReducer } from 'cobalt-js'
 
 import reducers from './reducers'
 
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { fetchedUrlReducer, requestProgressReducer } from 'cobalt-js'
-import { Provider } from 'react-redux'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
-import thunk from 'redux-thunk';
+
+/*********************    generated wrapper imports    *************************/
+
+/********************************************/
 
 const store = createStore(
   combineReducers({
     ...reducers,
-    routing: routerReducer,
     fetchedUrl: fetchedUrlReducer,
     requestProgress: requestProgressReducer
   }),
   applyMiddleware(thunk)
 )
 
-const history = syncHistoryWithStore(hashHistory, store)
+function createRoutes(){
+  return componentRoutes.map(function(route){
+    return <Route path={route.path} component={route.component}/>
+  })
+}
 
 render((
-<Provider store={store}>
-  <Router history={hashHistory}>
-    <Route path="/" component={App} />
-	<Route path="/posts" component={Posts}/>
-	<Route path="/users" component={Users}/>
-  </Router>
-</Provider>
+  <Provider store={store}>
+    <Router history={hashHistory}>
+      {createRoutes()}
+    </Router>
+  </Provider>
 ), document.getElementById('app'))

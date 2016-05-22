@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": {{text_command}},
-    "start": "webpack --inline --content-base . && node app.js"
+    "start": "node create_routes.js && webpack --inline --content-base . && node app.js"
   },
   "author": {{author}},
   "license": {{license}},
@@ -22,7 +22,8 @@
     "react-router": "2.3.0",
     "react-router-redux": "4.0.4",
     "redux": "3.5.2",
-    "redux-thunk": "2.0.1"
+    "redux-thunk": "2.0.1",
+    "yamljs": "^0.2.7"
   },
   "devDependencies": {
     "babel-core": "6.7.7",

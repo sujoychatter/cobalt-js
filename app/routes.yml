@@ -1,0 +1,8 @@
+- path: /
+  file: App
+
+- path: /posts
+  file: Posts
+
+- path: /users
+  file: Users
