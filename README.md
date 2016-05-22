@@ -3,6 +3,8 @@
 Everything React in a snap
 
 [![Code Climate](https://codeclimate.com/github/sujoychatter/cobalt-js/badges/gpa.svg)](https://codeclimate.com/github/sujoychatter/cobalt-js)
+[![npm version](https://img.shields.io/npm/v/cobalt-js.svg?style=flat-square)](https://www.npmjs.com/package/cobalt-js)
+[![npm downloads](https://img.shields.io/npm/dm/cobalt-js.svg?style=flat-square)](https://www.npmjs.com/package/cobalt-js)
 
 ## Features
 
