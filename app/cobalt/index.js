@@ -7,10 +7,11 @@ import thunk from 'redux-thunk';
 
 import { fetchedUrlReducer, requestProgressReducer } from 'cobalt-js'
 
-import reducers from './reducers'
+import reducers from '../reducers'
 
 
 /*********************    generated wrapper imports    *************************/
+
 
 /********************************************/
 
@@ -24,8 +25,8 @@ const store = createStore(
 )
 
 function createRoutes(){
-  return componentRoutes.map(function(route){
-    return <Route path={route.path} component={route.component}/>
+  return componentRoutes.map(function(route, index){
+    return <Route path={route.path} key={index} component={route.component}/>
   })
 }
 

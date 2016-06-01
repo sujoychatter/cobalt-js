@@ -1,5 +1,5 @@
 module.exports = {
-	entry: './app/index.js',
+	entry: './app/cobalt/index.js',
 
 	output: {
 		filename: 'bundle.js',
