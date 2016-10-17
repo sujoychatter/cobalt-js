@@ -20,7 +20,7 @@ program.args.forEach(function(arg){
 		case 'start':
 				startCobalt()
 	}
-})
+});
 
 function startCobalt(){
 	exec('npm start');
@@ -34,7 +34,7 @@ function initCobalt(){
 		name : project_path.slice(project_path.lastIndexOf('\/') + 1),
 		version : "0.0.1",
 		license : "ISC"
-	}
+	};
 	var schema = {
 		properties:{
 			name:{
@@ -59,31 +59,36 @@ function initCobalt(){
 				message: "License (" + defaults.license + ")"
 			}
 		}
-	}
-	prompt.start();
-	prompt.get(schema, function(err, results){
-		if(err){
-			console.log(err);
-			return;
-		}
-		var project_path = process.cwd();
-		var files = [{source: path.join(__dirname, '../project_package.json'), destination: 'package.json'}]
+	};
 
-		files.forEach(function(file){
-			var fileData = fs.readFileSync(file.source, "utf8"),
-			start = fileData.indexOf('{{'),
-			end = fileData.indexOf('}}', start);
-			while(start !== -1){
-				var key = fileData.slice(start + 2, end);
-				fileData = fileData.replace('{{' + key + '}}', '\"' + (results[key] || defaults[key] || '') + '\"');
-				start = fileData.indexOf('{{'),
-				end = fileData.indexOf('}}', start);
-			}
-			fs.writeFileSync(project_path + '/' + file.destination, fileData);
-		})
-		
-		setupNodeModules();
-	})
+	fs.exists(project_path + '/package.json', function(exists){
+		if(!exists){
+			prompt.start();
+			prompt.get(schema, function (err, results) {
+				if (err) {
+					console.log(err);
+					return;
+				}
+				var project_path = process.cwd();
+				var file = {source: path.join(__dirname, '../project_package.json'), destination: 'package.json'};
+
+				var fileData = fs.readFileSync(file.source, "utf8"),
+					start = fileData.indexOf('{{'),
+					end = fileData.indexOf('}}', start);
+				while (start !== -1) {
+					var key = fileData.slice(start + 2, end);
+					fileData = fileData.replace('{{' + key + '}}', '\"' + (results[key] || defaults[key] || '') + '\"');
+					start = fileData.indexOf('{{'),
+						end = fileData.indexOf('}}', start);
+				}
+				fs.writeFileSync(project_path + '/' + file.destination, fileData);
+
+				setupNodeModules();
+			});
+		} else {
+			setupNodeModules();
+		}
+	});
 
 	function setupNodeModules(){
 		console.log("--------Setting up node modules ----------")
