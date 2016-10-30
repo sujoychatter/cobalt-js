@@ -24,16 +24,21 @@ const store = createStore(
   applyMiddleware(thunk)
 )
 
-function createRoutes(){
-  return componentRoutes.map(function(route, index){
-    return <Route path={route.path} key={index} component={route.component} routeId={route.routeId}/>
+function createRoutes(routes){
+  if(!routes){
+    return null;
+  }
+  return routes.map(function(route, index){
+    return (<Route path={route.path} key={index} component={route.component} routeId={route.routeId}>
+      {createRoutes(route.children)}
+    </Route>)
   })
 }
 
 render((
   <Provider store={store}>
     <Router history={hashHistory}>
-      {createRoutes()}
+      {createRoutes(componentRoutes)}
     </Router>
   </Provider>
 ), document.getElementById('app'))

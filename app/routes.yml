@@ -10,6 +10,6 @@
   folder: users
   file: Users
   children:
-    - path: user/:id
+    - path: user/:userId
       folder: user
       file: User

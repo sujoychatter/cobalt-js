@@ -8,7 +8,7 @@ var templateWrapper = fs.readFileSync('app/cobalt/template_wrapper.js', "utf8");
 var importStatements = "";
 
 var RELATIVE_PATH = '../modules/';
-var setStatementTemplate = "that.setState({{set_object}})"
+var setStatementTemplate = "that.setState({{set_object}})";
 
 var routeComponentMap = "var componentRoutes =\n[\n";
 
@@ -44,6 +44,20 @@ function getDependentImports(route, parentPath, lastRec){
   return {requireFiles: requireFiles, setStatements: setStatements};
 }
 
+function getRouteObjects(route, component){
+  var childrenRoutes = "";
+  if(route.children){
+    childrenRoutes = "[";
+    route.children.forEach(function(childRoute){
+      childrenRoutes += getRouteObjects(childRoute, component);
+    });
+    childrenRoutes += "]";
+  }
+  return '{path: \'' + route.path + '\', component: ' + component + ', routeId: \'' + route.routeId + '\', ' +
+    (childrenRoutes ? ("children: " + childrenRoutes) : '')
+    + ' },\n';
+}
+
 createUniqRouteIds(nativeObjectRoutes);
 
 nativeObjectRoutes.forEach(function(route){
@@ -57,7 +71,9 @@ nativeObjectRoutes.forEach(function(route){
   fs.writeFileSync('app/cobalt/' + route.file + 'Wrapper.js', formattedWrapper);
 
   importStatements += 'import ' + route.file + 'Wrapper from \'./' + route.file + 'Wrapper\';\n';
-  routeComponentMap += '  {path: \'' + route.path + '\', component: ' + route.file + 'Wrapper' + ', routeId: \'' + route.routeId + '\' },\n'
+
+  var childrenRoutes = "";
+  routeComponentMap += getRouteObjects(route, (route.file + 'Wrapper'))
 
 });
 

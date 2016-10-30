@@ -3,12 +3,16 @@ import { connect } from 'react-redux';
 
 var User = React.createClass( {
   render() {
-    return <div>User: {this.props.users}</div>
+    return <div>User: id: {this.props.user.id}</div>
   }
 })
 
-function mapStateToProps(state) {
-  return { users: state.users };
+function mapStateToProps(state, ownProps) {
+  var userId = ownProps.params.userId;
+  return { user: state.users.items.filter(function(user){
+      return user.id == userId;
+    })[0]
+  };
 }
 
 User = connect(mapStateToProps)(User);
