@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { action } from 'cobalt-js';
-import { loadDemoReq } from '../models/posts';
+import { loadDemoReq } from '../../models/posts';
 
 var Posts = React.createClass( {
   componentWillMount(){

@@ -26,7 +26,7 @@ const store = createStore(
 
 function createRoutes(){
   return componentRoutes.map(function(route, index){
-    return <Route path={route.path} key={index} component={route.component}/>
+    return <Route path={route.path} key={index} component={route.component} routeId={route.routeId}/>
   })
 }
 

@@ -9,8 +9,8 @@ export default class Wrapper extends Component{
 
   loadAndShowComponent(){
     var that = this;
-    require.ensure(['../modules/{{component_name}}'], function(require){
-      that.setState({component: require('../modules/{{component_name}}')})
+    require.ensure([{{import_components}}], function(require){
+      {{import_component_set}}
     });
   }
 
@@ -19,7 +19,7 @@ export default class Wrapper extends Component{
   }
 
   render() {
-    if(!this.state.component){
+    if(!this.state.components || !this.state.components[this.props.route.routeId]){
       return (
         <div>
           This is a placeholder
@@ -27,7 +27,8 @@ export default class Wrapper extends Component{
       )
     }
     else{
-      return <this.state.component />
+      var state = {component: this.state.components[this.props.route.routeId]};
+      return <state.component {...this.props}/>
     }
 
   }
