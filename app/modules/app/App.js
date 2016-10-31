@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-require('../../scss/app.scss');
 
 module.exports =  React.createClass({
   render() {
