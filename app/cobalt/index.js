@@ -35,10 +35,28 @@ function createRoutes(routes){
   })
 }
 
+function getHeader(){
+  if(typeof Header !== 'undefined'){
+    return <Header></Header>
+  }
+}
+
+function getFooter(){
+  if(typeof Footer !== 'undefined'){
+    return <Footer></Footer>
+  }
+}
+
 render((
-  <Provider store={store}>
-    <Router history={hashHistory}>
-      {createRoutes(componentRoutes)}
-    </Router>
-  </Provider>
-), document.getElementById('app'))
+  <div id="app-content">
+    {getHeader()}
+    <div className="routed-content">
+      <Provider store={store}>
+        <Router history={hashHistory}>
+          {createRoutes(componentRoutes)}
+        </Router>
+      </Provider>
+    </div>
+    {getFooter()}
+  </div>
+), document.getElementById('app'));

@@ -1,17 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router';
+require('../../scss/app.scss');
 
 module.exports =  React.createClass({
   render() {
     return (
       <div>
-        <h1>Cobalt JS Application</h1>
-        <h2>Everything React in a snap</h2>
+        <div className="routes">
+          Example Routes
+        </div>
         <ul role="nav">
-          <li><Link to="/posts">Posts</Link></li>
-          <li><Link to="/users">Users</Link></li>
+          <li><Link to="/posts">Lazy Loaded Posts</Link></li>
+          <li><Link to="/users">Users with nested route</Link></li>
         </ul>
       </div>
     )
   }
-})
+});
