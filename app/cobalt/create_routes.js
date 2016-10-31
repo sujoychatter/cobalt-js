@@ -77,13 +77,26 @@ nativeObjectRoutes.forEach(function(route){
 
 });
 
-routeComponentMap = routeComponentMap.slice(0, routeComponentMap.length - 2) + '\n];\n';
+fs.exists('app/modules/fixed_components/header.js', function(exists){
+  if(exists){
+    importStatements += 'import Header from \'../modules/fixed_components/header\';\n';
+  }
 
-var index_file = fs.readFileSync('app/cobalt/index.js', "utf8");
+  fs.exists('app/modules/fixed_components/footer.js', function(exists) {
+    if (exists) {
+      importStatements += 'import Footer from \'../modules/fixed_components/footer\';\n';
+    }
 
-var start = index_file.indexOf('/*********************    generated wrapper imports    *************************/') + 81,
-    end = index_file.indexOf('/********************************************/');
+    routeComponentMap = routeComponentMap.slice(0, routeComponentMap.length - 2) + '\n];\n';
 
-index_file = index_file.slice(0, start) + '\n\n' + importStatements + '\n' + routeComponentMap + '\n' + index_file.slice(end); 
+    var index_file = fs.readFileSync('app/cobalt/index.js', "utf8");
 
-fs.writeFileSync('app/cobalt/index.js', index_file);
+    var start = index_file.indexOf('/*********************    generated wrapper imports    *************************/') + 81,
+      end = index_file.indexOf('/********************************************/');
+
+    index_file = index_file.slice(0, start) + '\n\n' + importStatements + '\n' + routeComponentMap + '\n' + index_file.slice(end);
+
+    fs.writeFileSync('app/cobalt/index.js', index_file);
+  });
+
+});
