@@ -91,7 +91,7 @@ function initCobalt(){
 	});
 
 	function setupNodeModules(){
-		console.log("--------Setting up node modules ----------")
+		console.log("--------Setting up node modules ----------");
 		var spinner = new Spinner('Please wait... %s');
 		spinner.setSpinnerString('|/-\\');
 		spinner.start();
@@ -102,9 +102,9 @@ function initCobalt(){
 			}
 			console.log(stdout);
 			spinner.stop(true)
-			console.log('--------Node modules setup complete--------')
+			console.log('--------Node modules setup complete--------');
 			
-			console.log('Starting copying of files...')
+			console.log('Starting copying of files...');
 			copyFiles();
 		});
 	}
@@ -116,7 +116,10 @@ function initCobalt(){
 			{source: '/../app', destination: '/app/', notification: 'Copy app...Done'},
 			{source: '/../server', destination: '/server/', notification: 'Copy server...Done'},
 			{source: '/../app.js', destination: '/app.js', notification: 'Copy app.js ...Done'},
+			{source: '/../project_index.dev.js', destination: '/index.dev.js', notification: 'Copy dev index config ...Done'},
+			{source: '/../project_webpack.dev.config.js', destination: '/webpack.dev.config.js', notification: 'Copy dev webpack config ...Done'},
 			{source: '/../project_webpack.config.js', destination: '/webpack.config.js', notification: 'Copy webpack config ...Done'},
+			{source: '/../project_babelrc', destination: '/.babelrc', notification: 'Copy babelrc ...Done'},
 			{source: '/../index.js', destination: '/node_modules/cobalt-js/index.js', notification: 'Copy cobalt package..Done'}
 		];
 
