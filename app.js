@@ -1,11 +1,17 @@
 var express = require('express');
 var app = express();
+var webpackDevHelper = require('./index.dev.js');
 
 app.set('view engine', 'jade');
 
 app.set('views', './server/views');
 
-app.use(express.static('public'));
+if (process.env.NODE_ENV !== 'production') {
+  console.log('DEVOLOPMENT ENVIRONMENT: Turning on WebPack Middleware...');
+  webpackDevHelper.useWebpackMiddleware(app);
+} else {
+  app.use(express.static('public'));
+}
 
 var router = require('./server/router');
 router.init(app);
