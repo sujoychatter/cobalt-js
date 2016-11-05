@@ -119,6 +119,7 @@ function initCobalt(){
 			{source: '/../project_index.dev.js', destination: '/index.dev.js', notification: 'Copy dev index config ...Done'},
 			{source: '/../project_webpack.dev.config.js', destination: '/webpack.dev.config.js', notification: 'Copy dev webpack config ...Done'},
 			{source: '/../project_webpack.config.js', destination: '/webpack.config.js', notification: 'Copy webpack config ...Done'},
+			{source: '/../project_babelrc', destination: '/.babelrc', notification: 'Copy babelrc ...Done'},
 			{source: '/../index.js', destination: '/node_modules/cobalt-js/index.js', notification: 'Copy cobalt package..Done'}
 		];
 
