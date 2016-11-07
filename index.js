@@ -27,10 +27,10 @@ function makeRequest(url, settings){
 function needsReq(item, state){
 	var url = item.url,
 		settings = item.reqSettings,
-		checkType = item.checkType,
+		track = item.track,
 		name = item.name;
 
-	if((!settings || !settings.type || settings.type === 'GET') && checkType === "url"){
+	if((!settings || !settings.type || settings.type === 'GET') && track){
 		return state.fetchedUrl.urls.indexOf(getRequestName(name, url, settings)) === -1;
 	}
 	return true;
@@ -38,9 +38,9 @@ function needsReq(item, state){
 
 const initialfetchedUrlState = {
 	urls: []
-}
+};
 
-const initialRequestProgressState = {}
+const initialRequestProgressState = {};
 
 function getRequestName(name, url, settings){
 	return name || (url + JSON.stringify(settings));
@@ -50,10 +50,34 @@ module.exports = {
 	action : function(name, model, item){
 		return function(dispatch, getState){
 			if(item.forceReq === true || (item.url && needsReq(item, getState()))){
-				dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) ,inProgress: true}}));
+
+				if( item.track ) {
+					dispatch(action('logURLFetched', 'cobalt', {
+						data: {
+							url: item.url,
+							settings: item.reqSettings,
+							name: item.name
+						},
+						removeLog: true
+					}));
+				}
+
+				dispatch(action('ajaxRequest', 'cobalt', {
+					data: {
+						name: getRequestName(item.name, item.url, item.reqSettings),
+						inProgress: true
+					}
+				}));
+
 				makeRequest(item.url, item.reqSettings).then(function(data){
-					if(!item.checkType || item.checkType === 'url'){
-						dispatch(action('logURLFetched', 'cobalt', {data: {url: item.url, settings: item.reqSettings, name: item.name}}))
+					if( item.track ){
+						dispatch(action('logURLFetched', 'cobalt', {
+							data: {
+								url: item.url,
+								settings: item.reqSettings,
+								name: item.name
+							}
+						}));
 					}
 					var itemWithData = objectAssign({}, item, {data: data});
 					dispatch(action('ajaxRequest', 'cobalt', {data: {name: getRequestName(item.name, item.url, item.reqSettings) , inProgress: false}}));
@@ -68,7 +92,18 @@ module.exports = {
 	fetchedUrlReducer: function(state = initialfetchedUrlState, action = {}) {
 		switch (action.type) {
 			case 'logURLFetched__cobalt':
-				var newState = {urls: state.urls.concat(getRequestName(action.data.name, action.data.url, action.data.settings))}
+				var reqName = getRequestName(action.data.name, action.data.url, action.data.settings);
+				var newState;
+				if( action.removeLog ){
+					var existingIndex = state.urls.indexOf(reqName);
+					newState = (existingIndex !== -1) ?
+						{urls: state.urls.slice(0, existingIndex).concat(state.urls.slice(existingIndex + 1))}	:
+						state;
+				}
+				else{
+					newState = {urls: state.urls.concat(getRequestName(action.data.name, action.data.url, action.data.settings))}
+				}
+
 				return  newState;
 			default:
 				return state;

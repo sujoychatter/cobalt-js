@@ -17,4 +17,4 @@ function mapStateToProps(state, ownProps) {
 
 User = connect(mapStateToProps)(User);
 
-module.exports = User
+module.exports = User;
