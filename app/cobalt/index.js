@@ -19,10 +19,10 @@ const store = createStore(
   combineReducers({
     ...reducers,
     fetchedUrl: fetchedUrlReducer,
-    requestProgress: requestProgressReducer
+    requestInProgress: requestProgressReducer
   }),
   applyMiddleware(thunk)
-)
+);
 
 function createRoutes(routes){
   if(!routes){
@@ -32,7 +32,7 @@ function createRoutes(routes){
     return (<Route path={route.path} key={index} component={route.component} routeId={route.routeId}>
       {createRoutes(route.children)}
     </Route>)
-  })
+  });
 }
 
 function getHeader(){

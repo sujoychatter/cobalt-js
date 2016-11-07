@@ -1,1 +1,1 @@
-export const loadDemoReq = {name: 'demoReq', url: '/api/demoPosts', checkType: 'url'}
+export const loadDemoReq = {name: 'demoReq', url: '/api/demoPosts', track: true};

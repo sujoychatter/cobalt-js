@@ -21,7 +21,7 @@ function mapDispatchToProps(dispatch){
 }
 
 function mapStateToProps(state) {
-  return { posts: state.posts , reqLoading: state.requestProgress.demoReq};
+  return { posts: state.posts , reqLoading: state.requestInProgress.demoReq};
 }
 
 Posts = connect(mapStateToProps, mapDispatchToProps)(Posts);

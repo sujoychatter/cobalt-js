@@ -13,6 +13,9 @@ var setStatementTemplate = "that.setState({{set_object}})";
 var routeComponentMap = "var componentRoutes =\n[\n";
 
 function createUniqRouteIds(routeObject){
+  if(!routeObject){
+    return;
+  }
   routeObject.forEach(function(route){
     route.routeId = shortid.generate();
     if(route.children){
@@ -60,22 +63,24 @@ function getRouteObjects(route, component){
 
 createUniqRouteIds(nativeObjectRoutes);
 
-nativeObjectRoutes.forEach(function(route){
-  var wrapper = templateWrapper;
-  var importObject = getDependentImports(route, '', true);
-  var setStatements = setStatementTemplate.replace("{{set_object}}", importObject.setStatements) + "\n";
+if(nativeObjectRoutes) {
+  nativeObjectRoutes.forEach(function (route) {
+    var wrapper = templateWrapper;
+    var importObject = getDependentImports(route, '', true);
+    var setStatements = setStatementTemplate.replace("{{set_object}}", importObject.setStatements) + "\n";
 
-  var formattedWrapper = wrapper.replace("{{import_components}}", importObject.requireFiles);
-  formattedWrapper = formattedWrapper.replace("{{import_component_set}}", setStatements);
+    var formattedWrapper = wrapper.replace("{{import_components}}", importObject.requireFiles);
+    formattedWrapper = formattedWrapper.replace("{{import_component_set}}", setStatements);
 
-  fs.writeFileSync('app/cobalt/' + route.file + 'Wrapper.js', formattedWrapper);
+    fs.writeFileSync('app/cobalt/' + route.file + 'Wrapper.js', formattedWrapper);
 
-  importStatements += 'import ' + route.file + 'Wrapper from \'./' + route.file + 'Wrapper\';\n';
+    importStatements += 'import ' + route.file + 'Wrapper from \'./' + route.file + 'Wrapper\';\n';
 
-  var childrenRoutes = "";
-  routeComponentMap += getRouteObjects(route, (route.file + 'Wrapper'))
+    var childrenRoutes = "";
+    routeComponentMap += getRouteObjects(route, (route.file + 'Wrapper'))
 
-});
+  });
+}
 
 fs.exists('app/modules/fixed_components/header.js', function(exists){
   if(exists){
@@ -87,7 +92,7 @@ fs.exists('app/modules/fixed_components/header.js', function(exists){
       importStatements += 'import Footer from \'../modules/fixed_components/footer\';\n';
     }
 
-    routeComponentMap = routeComponentMap.slice(0, routeComponentMap.length - 2) + '\n];\n';
+    routeComponentMap = routeComponentMap.slice(0, routeComponentMap.length) + '\n];\n';
 
     var index_file = fs.readFileSync('app/cobalt/index.js', "utf8");
 

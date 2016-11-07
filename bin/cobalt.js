@@ -12,10 +12,10 @@ program
   .version('0.0.1')
   .parse(process.argv);
 
-program.args.forEach(function(arg){
+program.args.forEach(function(arg, index){
 	switch(arg){
 		case 'init':
-				initCobalt();
+				initCobalt(program.args[index + 1]);
 				break;
 		case 'start':
 				startCobalt()
@@ -23,11 +23,11 @@ program.args.forEach(function(arg){
 });
 
 function startCobalt(){
-	exec('npm start');
-	console.log("Server started at port 3000")
+	var startScript = exec('npm start');
+	startScript.stdout.pipe(process.stdout)
 }
 
-function initCobalt(){
+function initCobalt(demoArg){
 	prompt.message = "";
 	var project_path = process.cwd();
 	var defaults = {
@@ -70,7 +70,7 @@ function initCobalt(){
 					return;
 				}
 				var project_path = process.cwd();
-				var file = {source: path.join(__dirname, '../project_package.json'), destination: 'package.json'};
+				var file = {source: path.join(__dirname, '../project/package.json'), destination: 'package.json'};
 
 				var fileData = fs.readFileSync(file.source, "utf8"),
 					start = fileData.indexOf('{{'),
@@ -83,14 +83,14 @@ function initCobalt(){
 				}
 				fs.writeFileSync(project_path + '/' + file.destination, fileData);
 
-				setupNodeModules();
+				setupNodeModules(demoArg);
 			});
 		} else {
-			setupNodeModules();
+			setupNodeModules(demoArg);
 		}
 	});
 
-	function setupNodeModules(){
+	function setupNodeModules(demoArg){
 		console.log("--------Setting up node modules ----------");
 		var spinner = new Spinner('Please wait... %s');
 		spinner.setSpinnerString('|/-\\');
@@ -101,37 +101,45 @@ function initCobalt(){
 				return;
 			}
 			console.log(stdout);
-			spinner.stop(true)
+			spinner.stop(true);
 			console.log('--------Node modules setup complete--------');
-			
-			console.log('Starting copying of files...');
-			copyFiles();
+
+			copyFiles(demoArg);
 		});
 	}
 
-	function copyFiles(){
-		
+	function copyFiles(demoArg){
+		console.log('Starting copying of files...');
 		var project_path = process.cwd(),
 		copyItems = [
-			{source: '/../app', destination: '/app/', notification: 'Copy app...Done'},
+			{source: '/../app/cobalt', destination: '/app/cobalt/', notification: 'Copy cobalt generators...Done', notArgCondition: "demo"},
+			{source: '/../project/example_routes.yml', destination: '/app/routes.yml', notification: 'Copy routes file...Done', notArgCondition: "demo"},
+
+			{source: '/../app', destination: '/app/', notification: 'Copy routes file...Done', argCondition : "demo"},
+			{source: '/../project/routes.yml', destination: '/app/routes.yml', notification: 'Copy routes file...Done', argCondition : "demo"},
+
 			{source: '/../server', destination: '/server/', notification: 'Copy server...Done'},
 			{source: '/../app.js', destination: '/app.js', notification: 'Copy app.js ...Done'},
-			{source: '/../project_index.dev.js', destination: '/index.dev.js', notification: 'Copy dev index config ...Done'},
-			{source: '/../project_webpack.dev.config.js', destination: '/webpack.dev.config.js', notification: 'Copy dev webpack config ...Done'},
-			{source: '/../project_webpack.config.js', destination: '/webpack.config.js', notification: 'Copy webpack config ...Done'},
-			{source: '/../project_babelrc', destination: '/.babelrc', notification: 'Copy babelrc ...Done'},
+			{source: '/../project/index.dev.js', destination: '/index.dev.js', notification: 'Copy dev index config ...Done'},
+			{source: '/../project/webpack.dev.config.js', destination: '/webpack.dev.config.js', notification: 'Copy dev webpack config ...Done'},
+			{source: '/../project/webpack.config.js', destination: '/webpack.config.js', notification: 'Copy webpack config ...Done'},
+			{source: '/../project/babelrc', destination: '/.babelrc', notification: 'Copy babelrc ...Done'},
 			{source: '/../index.js', destination: '/node_modules/cobalt-js/index.js', notification: 'Copy cobalt package..Done'}
 		];
 
 		exec('mkdir node_modules/cobalt-js');
+		exec('mkdir app');
+		exec('mkdir app/models app/modules app/modules/fixed_components app/reducers app/scss');
 
 		copyItems.forEach(function(item){
-			ncp(path.join(__dirname , item.source) , path.join(project_path , item.destination), function(err){
-				if(err){
-					console.log(err);
-				}
-				console.log(item.notification);
-			})
+			if((!item.argCondition || item.argCondition === demoArg) && (!item.notArgCondition || item.notArgCondition !== demoArg)) {
+				ncp(path.join(__dirname, item.source), path.join(project_path, item.destination), function (err) {
+					if (err) {
+						console.log(err);
+					}
+					console.log(item.notification);
+				})
+			}
 		})
 	}
 }

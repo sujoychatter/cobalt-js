@@ -1,0 +1,16 @@
+#Example:
+#- path: /
+#  folder: app
+#  file: App
+#
+#- path: /posts
+#  folder: posts
+#  file: Posts
+#
+#- path: /users
+#  folder: users
+#  file: Users
+#  children:
+#    - path: user/:userId
+#      folder: user
+#      file: User
