@@ -24,6 +24,8 @@ In a fresh folder:
 
 ``` cobalt start  ```
 
+``` Goto: localhost:3000 ```
+
 ## Documentation
 Cobalt JS is a combination of [React](https://github.com/facebook/react) and [Redux](https://github.com/reactjs/redux). Documentation on these may be found in their source repositories.
 
