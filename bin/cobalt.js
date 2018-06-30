@@ -115,7 +115,7 @@ function initCobalt(demoArg){
 			{source: '/../app/cobalt', destination: '/app/cobalt/', notification: 'Copy cobalt generators...Done', notArgCondition: "demo"},
 			{source: '/../project/example_routes.yml', destination: '/app/routes.yml', notification: 'Copy routes file...Done', notArgCondition: "demo"},
 
-			{source: '/../app', destination: '/app/', notification: 'Copy routes file...Done', argCondition : "demo"},
+			{source: '/../app/', destination: '/app/', notification: 'Copy routes file...Done', argCondition : "demo"},
 			{source: '/../project/routes.yml', destination: '/app/routes.yml', notification: 'Copy routes file...Done', argCondition : "demo"},
 
 			{source: '/../server', destination: '/server/', notification: 'Copy server...Done'},
